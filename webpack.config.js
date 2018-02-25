@@ -37,4 +37,9 @@ module.exports = {
         }],
     },
     devtool: IS_DEV ? 'eval-source-map' : undefined,
+    externals: {
+        fs: 'require("fs")',
+        buffer: 'require("buffer")',
+        winston: 'require("winston")',
+    },
 };
