@@ -1,30 +1,36 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const IS_DEV = (process.env.NODE_ENV === 'dev');
 
-const dirNode = 'node_modules';
-const dirSrc = path.join(__dirname, 'src');
-const dirAssets = path.join(__dirname, 'assets');
+const modulesDir = 'node_modules';
+const srcDir = path.join(__dirname, 'src');
+const distDir = path.join(__dirname, 'dist');
+
+function onlyIf(cond, value) {
+    return cond ? [value] : [];
+}
 
 module.exports = {
     target: 'node',
-    entry: path.join(dirSrc, 'index.js'),
+    entry: path.join(srcDir, 'index.js'),
     output: {
-        filename: 'dist/bundle.js',
+        path: distDir,
+        filename: IS_DEV ? 'bundle.dev.js' : 'bundle.js',
         // library: 'rightPad',
-        // libraryTarget: 'umd'
+        // libraryTarget: 'umd',
     },
     resolve: {
         modules: [
-            dirNode,
-            dirSrc,
-            dirAssets,
+            modulesDir,
+            srcDir,
         ],
     },
     plugins: [
         new webpack.DefinePlugin({ IS_DEV }),
         new webpack.ProvidePlugin({ _: 'lodash' }),
+        ...onlyIf(!IS_DEV, new UglifyJsPlugin()),
     ],
     module: {
         rules: [{
@@ -38,8 +44,9 @@ module.exports = {
     },
     devtool: IS_DEV ? 'eval-source-map' : undefined,
     externals: {
-        fs: 'require("fs")',
-        buffer: 'require("buffer")',
         winston: 'require("winston")',
+        minimist: 'require("minimist")',
+        joi: 'require("joi")',
+        lodash: 'require("lodash")',
     },
 };

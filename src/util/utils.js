@@ -57,6 +57,9 @@ export function byteSize(data) {
 
 export function getOrExec(obj, args) {
     if (_.isFunction(obj)) {
+        if (!args) {
+            return obj();
+        }
         return obj(...args);
     }
     return obj;
@@ -64,4 +67,14 @@ export function getOrExec(obj, args) {
 
 export function reverseLookup(obj, field) {
     return _.invert(obj)[field];
+}
+
+export function prettyPrint(value) {
+    if (_.isArray(value)) {
+        return `[${value.map(prettyPrint).join(', ')}]`;
+    } else if (_.isPlainObject(value)) {
+        return JSON.stringify(value);
+    }
+
+    return value;
 }

@@ -1,12 +1,13 @@
 {
-    "name": "wx-config-client",
+    "name": "templates-node-simple",
     "version": "0.0.1",
     "description": "",
     "main": "dist/bundle.js",
     "scripts": {
-        "start": "node dist/bundle.js",
-        "build": "webpack",
-        "watch": "npm run build  -- -w"
+        "start": "node dist/bundle.dev.js",
+        "build": "NODE_ENV=production webpack",
+        "watch": "NODE_ENV=dev webpack -w",
+        "debug": "node --inspect-brk dist/bundle.dev.js"
     },
     "author": "Raffaele Canale",
     "devDependencies": {
@@ -17,13 +18,13 @@
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-import-resolver-webpack": "^0.8.4",
         "eslint-plugin-import": "^2.9.0",
+        "uglifyjs-webpack-plugin": "^1.2.2",
         "webpack": "^3.11.0"
     },
     "dependencies": {
-        "axios": "^0.17.1",
         "joi": "^13.1.2",
         "lodash": "^4.17.5",
         "minimist": "^1.2.0",
-        "winston": "^2.4.0"
+        "winston": "git://github.com:RaffaeleCanale/winston.git#fixes"
     }
 }
