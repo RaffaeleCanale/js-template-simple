@@ -22,9 +22,9 @@
         "webpack": "^3.11.0"
     },
     "dependencies": {
+        "chalk": "^2.3.2",
         "joi": "^13.1.2",
         "lodash": "^4.17.5",
-        "minimist": "^1.2.0",
-        "winston": "git://github.com:RaffaeleCanale/winston.git#fixes"
+        "minimist": "^1.2.0"
     }
 }

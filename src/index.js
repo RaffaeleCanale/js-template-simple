@@ -12,4 +12,4 @@ if (error) {
     Logger.error(error);
 }
 
-console.log('argv', argv);
+Logger.info('argv', argv);

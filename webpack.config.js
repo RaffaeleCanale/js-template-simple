@@ -43,10 +43,4 @@ module.exports = {
         }],
     },
     devtool: IS_DEV ? 'eval-source-map' : undefined,
-    externals: {
-        winston: 'require("winston")',
-        minimist: 'require("minimist")',
-        joi: 'require("joi")',
-        lodash: 'require("lodash")',
-    },
 };

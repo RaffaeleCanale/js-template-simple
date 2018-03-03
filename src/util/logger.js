@@ -1,60 +1,51 @@
-// eslint-disable-next-line import/extensions
-import winston from 'winston';
+import chalk from 'chalk';
 import { getOrExec, prettyPrint } from 'util/utils';
 
-const { format } = winston;
+function levelFormatter(color, level) {
+    return color(level.substring(0, 4).toUpperCase());
+}
 
-function metaFormatter(info) {
-    if (_.isArray(info.meta)) {
-        // eslint-disable-next-line no-param-reassign
-        info.message = `${info.message} ${info.meta.map(prettyPrint).join(' ')}`;
+const defaultOptions = {
+    transport: console,
+    levels: {
+        verbose: levelFormatter.bind(null, chalk.cyan),
+        info: levelFormatter.bind(null, chalk.green),
+        warning: levelFormatter.bind(null, chalk.yellow),
+        error: levelFormatter.bind(null, chalk.red),
+    },
+    formatter: info => `${info.timestamp} ${info.level} [${info.name}] - ${info.message}`,
+    nameFormatter: chalk.bold,
+};
+
+class Logger {
+
+    constructor(name, options) {
+        this.name = name;
+        _.assign(this, _.defaults(options, defaultOptions));
+
+        _.forEach(this.levels, (formatter, level) => {
+            this[level] = this.log.bind(this, formatter(level));
+        });
     }
-    return info;
+
+    log(level, ...message) {
+        const info = {
+            timestamp: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+            name: this.nameFormatter(getOrExec(this.name)),
+            level,
+            message: message.map(prettyPrint).join(' '),
+        };
+        this.transport.log(this.formatter(info));
+    }
 }
 
-function messageFormatter(name, info) {
-    // HACK: Here, 'message' contains the level and 'content' contains the message
-    // See below for more explanations
-    return `${info.timestamp} ${info.message} [${getOrExec(name)}] - ${info.content}`;
+export function setDefaults(options) {
+    _.assign(defaultOptions, options);
 }
 
-function levelFormatter(info) {
-    /* eslint-disable no-param-reassign */
-
-    /*
-    HACK:
-    winston doesn't allow (yet) to colorize anything else than message or level.
-    Additionally level cannot be modified.
-    So level is put in 'message' (and then colorized) and 'message' is stored in content.
-    */
-    info.content = info.message;
-    info.message = info.level.substring(0, 4).toUpperCase();
-
-    return info;
-    /* eslint-enable no-param-reassign */
+export function getLogger(name, options) {
+    return new Logger(name, options);
 }
 
-const transports = [
-    new (winston.transports.Console)(),
-];
-const level = 'verbose';
-
-export function getLogger(name) {
-    return winston.createLogger({
-        objectMode: true,
-        format: format.combine(
-            format.splat(),
-            { transform: metaFormatter },
-            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            { transform: levelFormatter },
-            format.colorize({ message: true }),
-            format.printf(messageFormatter.bind(null, name))
-        ),
-        transports,
-        level,
-    });
-}
-
-const defaultLogger = getLogger('logger');
-
+const defaultLogger = new Logger('logger', defaultOptions);
 export default defaultLogger;
