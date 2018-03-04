@@ -1,8 +1,8 @@
 {
-    "name": "templates-node-simple",
+    "name": "js-template-simple",
     "version": "0.0.1",
     "description": "Simple template for a NodeJS application transpiled with Webpack",
-    "repository": "github:RaffaeleCanale/templates-node-simple",
+    "repository": "github:RaffaeleCanale/js-template-simple",
     "license": "MIT",
     "main": "dist/bundle.js",
     "scripts": {
