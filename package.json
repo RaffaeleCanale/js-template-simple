@@ -1,7 +1,9 @@
 {
     "name": "templates-node-simple",
     "version": "0.0.1",
-    "description": "",
+    "description": "Simple template for a NodeJS application transpiled with Webpack",
+    "repository": "github:RaffaeleCanale/templates-node-simple",
+    "license": "MIT",
     "main": "dist/bundle.js",
     "scripts": {
         "start": "node dist/bundle.dev.js",
@@ -22,9 +24,9 @@
         "webpack": "^3.11.0"
     },
     "dependencies": {
-        "chalk": "^2.3.2",
         "joi": "^13.1.2",
         "lodash": "^4.17.5",
-        "minimist": "^1.2.0"
+        "minimist": "^1.2.0",
+        "js-utils": "git://github.com/RaffaeleCanale/js-utils.git"
     }
 }
