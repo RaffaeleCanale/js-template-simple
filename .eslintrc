@@ -5,7 +5,9 @@
         "plugin:import/warnings"
     ],
     "settings": {
-        "import/resolver": "node"
+        "import/resolver": {
+            "babel-plugin-root-import": {}
+        }
     },
     "parserOptions": {
         "ecmaVersion": 7,
